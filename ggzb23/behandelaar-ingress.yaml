@@ -24,5 +24,5 @@ spec:
         pathType: Prefix
   tls:
   - hosts:
-     - "*."wostrust.com
+     - "*.wostrust.com"
   - secretName: wostrust.com.cert
