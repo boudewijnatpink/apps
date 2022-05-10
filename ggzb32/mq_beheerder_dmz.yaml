@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: mq--beheerder--dmz}
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: mq--beheerder--dmz}
+  template:
+    metadata:
+      labels: {app: mq--beheerder--dmz}
+    spec:
+      containers:
+      - image: nexus-docker-releases.hchosting.nl/mq_beheerder:1.5.0
+        name: mq--beheerder--dmz--mq--beheerder
+        env: 
+        - name: EXPOSE_METRICS
+          value: "true"
+        - name: LOG4J_FORMAT_MSG_NO_LOOKUPS
+          value: "true"
+        - name: API_URL
+          value: "https://srv0485.cc.lan:26061/api"
+        - name: ENVIRONMENT_NAME
+          value: "Kwalificatie HP-UX (1)"
+      - image: nexus-docker-releases.hchosting.nl/http2https:1.4.0
+        name: mq--beheerder--dmz--http2https
+        env:
+        - name: EXPOSE_METRICS
+          value: "true"
+        - name: LOG4J_FORMAT_MSG_NO_LOOKUPS
+          value: "true"
+        - name: MAPPINGS
+          value: "name=beheerder,listen=12036,forward=11035"
