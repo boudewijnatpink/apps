@@ -1,0 +1,14 @@
+configMapGenerator:
+- {env: api_dmz_api.env, name: api--dmz--api}
+- {env: api_dmz_http2https.env, name: api--dmz--http2https}
+- {env: mq_behandelaar_dmz_mq_behandelaar.env, name: mq--behandelaar--dmz--mq--behandelaar}
+- {env: mq_behandelaar_dmz_http2https.env, name: mq--behandelaar--dmz--http2https}
+- {env: mq_beheerder_dmz_mq_beheerder.env, name: mq--beheerder--dmz--mq--beheerder}
+- {env: mq_beheerder_dmz_http2https.env, name: mq--beheerder--dmz--http2https}
+resources: [
+mq_beheerder_dmz.yaml,
+api_dmz.yaml, api-service.yaml,
+mq_behandelaar_dmz.yaml, behandelaar-ingress.yaml, behandelaar-service.yaml,
+wostrust-secret.yaml,
+networkpolicy.yaml
+]

@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: api--dmz}
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: api--dmz}
+  template:
+    metadata:
+      labels: {app: api--dmz}
+    spec:
+      containers:
+      - image: nexus-docker-releases.hchosting.nl/api:1.3.39.0
+        name: api--dmz--api
+        env:
+        - name: EXPOSE_METRICS
+          value: true
+        - name: LOG4J_FORMAT_MSG_NO_LOOKUPS
+          value: true
+        - name: REMOTE_HOST
+          value: 72.26.3.113
+        - name: REMOTE_PORT
+          value: 42254
+        - name: EXTERNAL_URL
+i         value: "https://srv0485.cc.lan:26061/api"
+        - name: ALLOWED_DOMAINS
+          value: localhost,srv0485.cc.lan
+        - name: PDF_CONVERSION_ENABLED
+          value: true
+        - name: PDF_CONVERTER_BASE_URL
+          value: https://172.26.10.125:12076
+        - name: PDF_CONVERTER_VERIFY_SSL
+          value: false
+        - configMapRef: 
+            name: dbconfigmap
+        - configMapRef: {name: api--dmz--http2https}
+      - image: nexus-docker-releases.hchosting.nl/http2https:1.4.0
+        name: api--dmz--http2https
+        env: 
+        - name: EXPOSE_METRICS
+          value: true
+        - name: LOG4J_FORMAT_MSG_NO_LOOKUPS
+          value: true
+        - name: MAPPINGS=
+          value: name=api,listen=12061,forward=11060
+      - name: ubuntu
+        image: ubuntu
+        args: [/bin/sh, -c,'i=0; while true; do echo "Hello World nr: $i"; i=$((i+1)); sleep 1; done'] 
+---
+apiVersion: v1 
+kind: ConfigMap 
+metadata:
+  name: dbconfigmap 
+#  behavior: create
+data:
+  qwport: "3306"
+  qwhost: remotehost
+  qwalt: yaremotehost
+
