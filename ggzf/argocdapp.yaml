@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    kubernetes.io/metadata.name: ggzf
+  name: ggzf
+spec:
+  finalizers:
+  - kubernetes
+
+---
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ggzf
+#  namespace: argocd
+spec:
+  destination:
+    namespace: ggzf
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: ggzf
+    repoURL: https://github.com/boudewijnatpink/apps.git
+    targetRevision: main
+  syncPolicy: {}
