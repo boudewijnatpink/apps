@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    kubernetes.io/metadata.name: ggzb
+  name: ggzb
+spec:
+  finalizers:
+  - kubernetes
+
+---
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ggzb
+#  namespace: argocd
+spec:
+  destination:
+    namespace: ggzb
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: ggzb
+    repoURL: https://github.com/boudewijnatpink/apps.git
+    targetRevision: main
+  syncPolicy: {}
