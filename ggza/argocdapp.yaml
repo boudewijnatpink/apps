@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  labels:
+    kubernetes.io/metadata.name: ggza
+  name: ggza
+spec:
+  finalizers:
+  - kubernetes
+
+---
+
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ggza
+#  namespace: argocd
+spec:
+  destination:
+    namespace: ggza
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: ggza
+    repoURL: https://github.com/boudewijnatpink/apps.git
+    targetRevision: main
+  syncPolicy: {}
