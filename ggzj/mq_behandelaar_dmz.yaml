@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: mq--behandelaar--dmz}
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: mq--behandelaar--dmz}
+  template:
+    metadata:
+      labels: {app: mq--behandelaar--dmz}
+    spec:
+      containers:
+      - image: nexus-docker-releases.hchosting.nl/mq_behandelaar:1.25.0
+        name: mq--behandelaar--dmz--mq--behandelaar
+        volumeMounts:
+        - mountPath: /ggz/logs
+          name: ggzj-logs
+        env:
+        - name: EXPOSE_METRICS
+          value: "true"
+        - name: LOG4J_FORMAT_MSG_NO_LOOKUPS
+          value: "true"
+        - name: API_URL
+          value: "https://ggzj.wostrust.com/api"
+        - name: ENVIRONMENT_NAME
+          value: "Kwalificatie HP-UX (1)"
+      - image: nexus-docker-releases.hchosting.nl/http2https:1.4.0
+        name: mq--behandelaar--dmz--http2https
+        env:
+        - name: EXPOSE_METRICS
+          value: "true"
+        - name: LOG4J_FORMAT_MSG_NO_LOOKUPS
+          value: "true"
+        - name: MAPPINGS
+          value: "name=behandelaar,listen=12021,forward=11020"
+      - name: busybox
+        image: busybox
+        args: [/bin/sh, -c,'i=0; while true; do echo "Hello World nr: $i"; i=$((i+1)); sleep 1; done'] 
+      volumes:
+      - hostPath:
+          path: /var/log/ggzjlogs
+          type: DirectoryOrCreate
+        name: ggzj-logs
