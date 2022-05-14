@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: behandelaar
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: ggza.wostrust.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: behandelaar-service
+            port:
+              number: 11020
+        path: /
+        pathType: Prefix
+      - backend:
+          service:
+            name: api-service
+            port:
+              number: 11060
+        path: /api
+        pathType: Prefix
+  tls:
+  - hosts:
+     - "*.wostrust.com"
+  - secretName: wostrust.com.cert
