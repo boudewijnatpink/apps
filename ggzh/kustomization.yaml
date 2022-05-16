@@ -1,7 +1,0 @@
-resources: [
-mq_beheerder_dmz.yaml,
-api_dmz.yaml, api-service.yaml,
-mq_behandelaar_dmz.yaml, behandelaar-ingress.yaml, behandelaar-service.yaml,
-wostrust-secret.yaml,
-networkpolicy.yaml
-]
